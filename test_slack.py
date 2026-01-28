@@ -38,18 +38,20 @@ async def test_slack():
         if conversations['channels']:
             print(f"✅ 找到 {len(conversations['channels'])} 个频道/对话:")
             for channel in conversations['channels'][:5]:
-                print(f"   - {channel['name']} (ID: {channel['id']})")
+                name = channel.get('name', f"DM (ID: {channel['id']})")
+                print(f"   - {name}")
         else:
             print("⚠️  没有找到频道")
         
         # 获取机器人可以访问的频道
         print("\n[3] 获取机器人成员的频道...")
-        bot_channels = client.users_conversations(user=auth_test['user_id'])
+        bot_channels = client.users_conversations(user=auth_test['user_id'], types="public_channel,private_channel,im")
         
         if bot_channels['channels']:
             print(f"✅ 机器人是这些频道的成员:")
             for channel in bot_channels['channels'][:5]:
-                print(f"   - {channel['name']} (ID: {channel['id']})")
+                name = channel.get('name', f"DM (ID: {channel['id']})")
+                print(f"   - {name} (ID: {channel['id']})")
         else:
             print("❌ 机器人不是任何频道的成员！")
             print("   解决方案: 在 Slack 中邀请机器人加入频道")
@@ -58,7 +60,7 @@ async def test_slack():
         print("\n[4] 测试发送消息...")
         if bot_channels['channels']:
             test_channel = bot_channels['channels'][0]['id']
-            test_channel_name = bot_channels['channels'][0]['name']
+            test_channel_name = bot_channels['channels'][0].get('name', "DM")
             
             try:
                 response = client.chat_postMessage(
@@ -83,6 +85,8 @@ async def test_slack():
         return False
     except Exception as e:
         print(f"\n❌ 连接错误: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 if __name__ == "__main__":
