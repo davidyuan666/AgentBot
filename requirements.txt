@@ -1,0 +1,8 @@
+python-telegram-bot==20.7
+aiocqhttp==2.4.4
+itchat==1.4.1
+httpx==0.26.0
+pydantic==2.5.0
+python-dotenv==1.0.0
+pyautogui==0.9.54
+psutil==5.9.6
