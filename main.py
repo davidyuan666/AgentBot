@@ -5,6 +5,7 @@ from core.agent import Agent
 from adapters.telegram_adapter import TelegramAdapter
 from adapters.qq_adapter import QQAdapter
 from adapters.wechat_adapter import WeChatAdapter
+from adapters.slack_adapter import SlackAdapter
 from utils.logger import logger
 
 async def main():
@@ -26,6 +27,14 @@ async def main():
         tasks.append(telegram.run())
     else:
         logger.info("Telegram disabled")
+    
+    # Slack
+    if config.SLACK_ENABLED:
+        logger.info("Slack enabled")
+        slack = SlackAdapter(agent)
+        tasks.append(slack.run())
+    else:
+        logger.info("Slack disabled")
     
     # QQ
     if config.QQ_ENABLED:

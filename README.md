@@ -31,3 +31,12 @@ pip install -r requirements.txt
 cp .env.example .env
 python main.py
 ```
+
+Slack:
+Bot Token权限
+chat:write
+app_mentions:read
+channels:history
+im:history
+groups:history
+mpim:history

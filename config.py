@@ -15,6 +15,12 @@ class Config(BaseSettings):
     TELEGRAM_TOKEN: Optional[str] = os.getenv("TELEGRAM_TOKEN")
     TELEGRAM_ENABLED: bool = bool(TELEGRAM_TOKEN)
     
+    # Slack
+    SLACK_ENABLED: bool = os.getenv("SLACK_ENABLED", "false").lower() == "true"
+    SLACK_BOT_TOKEN: Optional[str] = os.getenv("SLACK_BOT_TOKEN")
+    SLACK_SIGNING_SECRET: Optional[str] = os.getenv("SLACK_SIGNING_SECRET")
+    SLACK_APP_TOKEN: Optional[str] = os.getenv("SLACK_APP_TOKEN")
+    
     # QQ (CQHTTP)
     QQ_ENABLED: bool = os.getenv("QQ_ENABLED", "false").lower() == "true"
     QQ_ACCESS_TOKEN: Optional[str] = os.getenv("QQ_ACCESS_TOKEN")
