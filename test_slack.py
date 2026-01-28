@@ -65,7 +65,7 @@ async def test_slack():
             try:
                 response = client.chat_postMessage(
                     channel=test_channel,
-                    text="🤖 AgentBot 连接测试 - 如果你看到这条消息，说明机器人工作正常！"
+                    text="🤖 AgentBot 连接测试 - 如果你看到这条消息，说明机器人工作正常 by test_slack.py！"
                 )
                 print(f"✅ 消息已发送到 #{test_channel_name}")
                 print(f"   消息 ID: {response['ts']}")
