@@ -9,6 +9,7 @@ class Agent:
     """Main Agent orchestrating AI and PC control"""
     
     def __init__(self):
+        logger.info("Initializing Agent...")
         self.deepseek = DeepSeekAPI()
         self.pc_control = PCControl()
         self.conversation_history: Dict[str, List[Dict]] = {}
@@ -26,10 +27,12 @@ class Agent:
 
 用户会通过Telegram、QQ或WeChat与你聊天。请用中文回复，友好且有帮助。
 当用户要求执行操作时，提供清晰的结果信息。"""
+        logger.info("Agent initialized successfully")
     
     def get_user_history(self, user_id: str) -> List[Dict]:
         """Get conversation history for user"""
         if user_id not in self.conversation_history:
+            logger.info(f"Creating new conversation history for user {user_id}")
             self.conversation_history[user_id] = [
                 {"role": "system", "content": self.system_prompt}
             ]
@@ -37,29 +40,40 @@ class Agent:
     
     async def process_message(self, user_id: str, message: str) -> str:
         """Process user message and return response"""
+        logger.info(f"[AGENT] Processing message from {user_id}: {message}")
+        
         try:
             history = self.get_user_history(user_id)
+            logger.info(f"[AGENT] Current history length: {len(history)}")
             
             # Add user message
             history.append({"role": "user", "content": message})
+            logger.info(f"[AGENT] Added user message, history length now: {len(history)}")
             
             # Get response from DeepSeek
+            logger.info(f"[AGENT] Calling DeepSeek API...")
             response = await self.deepseek.chat(history)
+            logger.info(f"[AGENT] DeepSeek response received: {response[:100]}...")
             
             # Add assistant response
             history.append({"role": "assistant", "content": response})
+            logger.info(f"[AGENT] Added assistant response, history length now: {len(history)}")
             
             # Keep history manageable (last 10 exchanges)
             if len(history) > 20:
+                logger.info(f"[AGENT] History too long ({len(history)}), trimming...")
                 history = [history[0]] + history[-19:]
                 self.conversation_history[user_id] = history
             
+            logger.info(f"[AGENT] Returning response")
             return response
             
         except Exception as e:
-            logger.error(f"Error processing message: {e}")
-            return "抱歉，处理您的请求时出错了。"
+            logger.error(f"[AGENT] Error processing message: {type(e).__name__}: {e}")
+            return f"抱歉，处理您的请求时出错了: {str(e)}"
     
     async def close(self):
         """Cleanup resources"""
+        logger.info("Agent closing...")
         await self.deepseek.close()
+        logger.info("Agent closed")
