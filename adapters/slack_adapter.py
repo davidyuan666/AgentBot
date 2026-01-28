@@ -15,22 +15,6 @@ class SlackAdapter:
         self.pc_control = PCControl()
         
         logger.info("Initializing Slack adapter...")
-        
-        # 设置代理
-        if config.SLACK_PROXY_HOST and config.SLACK_PROXY_PORT:
-            proxy_url = config.SLACK_PROXY_URL
-            logger.info(f"Setting proxy: {proxy_url}")
-            print(f"\n✅ 代理已配置: {proxy_url}\n")
-            
-            # 设置环境变量
-            os.environ['http_proxy'] = proxy_url
-            os.environ['https_proxy'] = proxy_url
-            os.environ['HTTP_PROXY'] = proxy_url
-            os.environ['HTTPS_PROXY'] = proxy_url
-            
-            # 禁用 SSL 警告
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        
         logger.info(f"Bot Token: {config.SLACK_BOT_TOKEN[:20]}...")
         logger.info(f"App Token: {config.SLACK_APP_TOKEN[:20]}...")
         
@@ -74,8 +58,6 @@ class SlackAdapter:
                 say(f"❌ 错误: {str(e)}")
         
         logger.info("Slack handlers setup complete")
-    
-    # ... 其他方法保持不变 ...
     
     async def run(self):
         """Run Slack bot using Socket Mode"""

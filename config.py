@@ -13,7 +13,7 @@ class Config(BaseSettings):
     
     # Telegram
     TELEGRAM_TOKEN: Optional[str] = os.getenv("TELEGRAM_TOKEN")
-    TELEGRAM_ENABLED: bool = bool(TELEGRAM_TOKEN)
+    TELEGRAM_ENABLED: bool = os.getenv("TELEGRAM_ENABLED", "false").lower() == "true"
     
     # Slack
     SLACK_ENABLED: bool = os.getenv("SLACK_ENABLED", "false").lower() == "true"
@@ -22,14 +22,16 @@ class Config(BaseSettings):
     SLACK_APP_TOKEN: Optional[str] = os.getenv("SLACK_APP_TOKEN")
     
     # Slack 代理配置
-    SLACK_PROXY_HOST: str = os.getenv("SLACK_PROXY_HOST", "127.0.0.1")
-    SLACK_PROXY_PORT: int = int(os.getenv("SLACK_PROXY_PORT", "9788"))
-    SLACK_PROXY_TYPE: str = os.getenv("SLACK_PROXY_TYPE", "http")  # http 或 socks5
+    SLACK_PROXY_HOST: Optional[str] = os.getenv("SLACK_PROXY_HOST")
+    SLACK_PROXY_PORT: Optional[int] = int(os.getenv("SLACK_PROXY_PORT", "0")) if os.getenv("SLACK_PROXY_PORT") else None
+    SLACK_PROXY_TYPE: str = os.getenv("SLACK_PROXY_TYPE", "http")
     
     @property
-    def SLACK_PROXY_URL(self) -> str:
+    def SLACK_PROXY_URL(self) -> Optional[str]:
         """生成代理 URL"""
-        return f"{self.SLACK_PROXY_TYPE}://{self.SLACK_PROXY_HOST}:{self.SLACK_PROXY_PORT}"
+        if self.SLACK_PROXY_HOST and self.SLACK_PROXY_PORT:
+            return f"{self.SLACK_PROXY_TYPE}://{self.SLACK_PROXY_HOST}:{self.SLACK_PROXY_PORT}"
+        return None
     
     # QQ (CQHTTP)
     QQ_ENABLED: bool = os.getenv("QQ_ENABLED", "false").lower() == "true"
