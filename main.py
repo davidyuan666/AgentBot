@@ -51,6 +51,15 @@ async def main():
         logger.info("Slack enabled")
         print("✅ Slack 已启用")
         slack = SlackAdapter(agent)
+        # Optional: run local task.md on startup and post to Slack
+        if config.TASK_MD_RUN_ON_STARTUP:
+            try:
+                print("⏳ 启动时执行 task.md 并发送到 Slack...")
+                await slack.run_task_md_and_post()
+                print("✅ task.md 结果已发送（或已跳过）")
+            except Exception as e:
+                logger.error(f"Startup task.md failed: {type(e).__name__}: {e}")
+                print(f"⚠️ 启动时执行 task.md 失败: {e}")
         tasks.append(slack.run())
     else:
         logger.info("Slack disabled")

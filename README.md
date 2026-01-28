@@ -40,3 +40,16 @@ channels:history
 im:history
 groups:history
 mpim:history
+
+## task.md 自动任务（DeepSeek）
+
+你可以让机器人读取本地 `task.md`，调用 DeepSeek 完成任务，然后把结果发送到 Slack。
+
+- **手动触发**：在 Slack 里发送 `task`（或“执行任务”）即可运行 `TASK_MD_PATH` 指向的文件。
+- **启动时自动执行**：设置 `TASK_MD_RUN_ON_STARTUP=true`，并配置 `SLACK_TASK_CHANNEL`。
+
+需要在 `.env` 中配置：
+
+- **`TASK_MD_PATH`**：task 文件路径（默认 `task.md`）。
+- **`TASK_MD_RUN_ON_STARTUP`**：是否启动时自动执行一次（默认 `false`）。
+- **`SLACK_TASK_CHANNEL`**：把结果发到哪个 channel（例如 `#general` 或 channel id `C0123456789`）。

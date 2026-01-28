@@ -20,6 +20,12 @@ class Config(BaseSettings):
     SLACK_BOT_TOKEN: Optional[str] = os.getenv("SLACK_BOT_TOKEN")
     SLACK_SIGNING_SECRET: Optional[str] = os.getenv("SLACK_SIGNING_SECRET")
     SLACK_APP_TOKEN: Optional[str] = os.getenv("SLACK_APP_TOKEN")
+
+    # task.md runner
+    TASK_MD_PATH: str = os.getenv("TASK_MD_PATH", "task.md")
+    TASK_MD_RUN_ON_STARTUP: bool = os.getenv("TASK_MD_RUN_ON_STARTUP", "false").lower() == "true"
+    # Where to post task.md result (channel id like Cxxxx or channel name like #general)
+    SLACK_TASK_CHANNEL: Optional[str] = os.getenv("SLACK_TASK_CHANNEL")
     
     # Slack 代理配置
     SLACK_PROXY_HOST: Optional[str] = os.getenv("SLACK_PROXY_HOST")
