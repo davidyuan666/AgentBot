@@ -99,13 +99,12 @@ async def main():
     except KeyboardInterrupt:
         logger.info("Shutting down...")
         print("\n⏹️  正在关闭...")
-        await agent.close()
-        sys.exit(0)
     except Exception as e:
         logger.error(f"Fatal error: {e}")
         print(f"\n❌ 致命错误: {e}")
-        await agent.close()
         sys.exit(1)
+    finally:
+        await agent.close()
 
 if __name__ == "__main__":
     asyncio.run(main())
