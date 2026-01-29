@@ -48,4 +48,3 @@ async def run_task_md(task_path: Optional[str] = None) -> str:
     results = await execute_plan(steps)
     summary = render_summary(results)
     return f"✅ task.md 执行结果（{os.path.basename(path)}）\n\n{summary}"
-

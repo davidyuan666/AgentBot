@@ -153,4 +153,3 @@ def render_summary(results: List[StepResult]) -> str:
         if r.extra and "path" in r.extra:
             lines.append(f"   - path: {r.extra['path']}")
     return "\n".join(lines)
-
